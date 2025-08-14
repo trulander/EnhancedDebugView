@@ -8,16 +8,159 @@
     <licenseUrl>https://www.gnu.org/licenses/gpl-3.0.html</licenseUrl>
 
     <description><![CDATA[
-    Enhanced debugging experience for Python developers. This plugin extends PyCharm's debugger to show available methods, sorted private and protected fields, all dunder methods and fields for objects during debugging sessions.
-    By default, python's debugger doesn't show any methods that have objects, so the plugging resolve the problem, so you will know that methods available for specific object.
-    Also, python's debugger show non-readable names for private methods like __Classname__privatefield, but in the code you named it like __privatefield, the plugin can combine the fields together and show you it as expected without __classname.
+<p>Enhanced Debug View extends PyCharm's debugger by adding the ability to view available object methods, sorted private and protected fields, and all dunder methods and fields during debugging sessions.</p>
 
-    Features:
-    - Context menu action to show methods, sorted private and protected fields, dunder methods and fields for any specific object in debugger
-    - Automatic display of methods for all objects for all debugging sessions(configurable)
-    - Context menu for activation automatic display methods for all objects only for the current debugging session
-    - Toggle between manual and automatic mode
-    - Clean integration with existing debugger UI
+<h2>Features</h2>
+<ul>
+    <li><strong>Automatic Mode</strong>: Optionally show methods, grouped private and protected fields, and dunder methods for all objects automatically.</li>
+    <li><strong>Flexible Configuration</strong>: Filter private methods, magic (dunder) methods.</li>
+    <li><strong>Method Signatures</strong>: Display method signatures with parameters.</li>
+    <li><strong>Manual Mode</strong>: Display additional data only for specific objects.</li>
+    <li><strong>One-Session Automatic Mode</strong>: Activate through context menu in debugging mode for one session.</li>
+</ul>
+
+<h2>Requirements</h2>
+<ul>
+    <li>PyCharm 2023.1 or higher</li>
+</ul>
+
+<h2>Usage</h2>
+
+<h3>Manual Mode (Default)</h3>
+<ol>
+    <li>Start debugging a Python script.</li>
+    <li>Stop at a breakpoint.</li>
+    <li>In the Variables panel, right-click on any object.</li>
+    <li>Select "Add extra data to the object" from the context menu.</li>
+    <li>The selected object will display additional lists with user methods, private and protected fields, dunder methods and fields, based on plugin settings.</li>
+</ol>
+<p><img src="https://github.com/trulander/EnhancedDebugView/raw/master/docs/images/example6.jpg" alt="Manual Mode Example" width="900"/></p>
+
+<h3>Automatic Mode</h3>
+<ol>
+    <li>Open <code>File → Settings → Tools → Enhanced Debug View</code>.</li>
+    <li>Enable the "Automatically apply for all objects in the variable panel" option.</li>
+    <li>Configure filters as desired:
+        <ul>
+            <li>Show object methods (starting with <code>_</code>)</li>
+            <li>Show magic methods and fields (<code>__init__</code>, <code>__str__</code>, etc.)</li>
+            <li>Show protected fields</li>
+            <li>Show private fields</li>
+        </ul>
+    </li>
+    <li>Apply settings.</li>
+</ol>
+<p><img src="https://github.com/trulander/EnhancedDebugView/raw/master/docs/images/settings.jpg" alt="Settings" width="900"/></p>
+
+<h3>Automatic Mode for One Debugging Session Only</h3>
+<ol>
+    <li>Run code in debugging mode.</li>
+    <li>Wait for your code to stop at your first breakpoint.</li>
+    <li>In the Threads & Variables tab, right-click in an empty area to open the context menu and select <code>Enable Auto adding extra data for the current session</code>.</li>
+    <li>A popup window will inform you about activating automatic mode for the current session.</li>
+    <li>When navigating through the object tree, additional information will be added when expanding each object.</li>
+</ol>
+<p><img src="https://github.com/trulander/EnhancedDebugView/raw/master/docs/images/example4.jpg" alt="One-Session Mode Example" width="900"/></p>
+<p><img src="https://github.com/trulander/EnhancedDebugView/raw/master/docs/images/example5.jpg" alt="One-Session Mode Example" width="900"/></p>
+
+<h3>Settings</h3>
+<p>The plugin provides the following configuration options:</p>
+<ul>
+    <li><strong>Automatic method display</strong>: Automatically show methods for all objects.</li>
+    <li><strong>Show private fields</strong>: Methods starting with <code>__</code> underscores, displayed as <code>__privatemethod</code> instead of <code>__Classname__privatemethod</code>.</li>
+    <li><strong>Show protected fields</strong>: Methods starting with <code>_</code> underscore.</li>
+    <li><strong>Show user methods</strong>: Show methods including signatures, which the standard debugger does not display.</li>
+    <li><strong>Show all available dunder methods and fields</strong>: Displays standard fields and methods like <code>__init__</code>, <code>__dict__</code>, etc.</li>
+</ul>
+
+<h2>Usage Example</h2>
+<pre>
+class Example:
+    def __init__(self, value: int):
+        self.public_field = value
+        self._protected_field = "protected"
+        self.__private_field = "private"
+
+    def public_method(self, x: int, y: str = "default") -> str:
+        return f"{x}: {y}"
+
+    def _protected_method(self, data: list) -> bool:
+        return len(data) > 0
+
+    def __private_method(self) -> None:
+        pass
+
+obj = Example(1)
+obj # Set breakpoint here
+
+# In the Threads & Variables tab, when expanding object tabs, new fields with new information will be automatically added
+</pre>
+<p><img src="https://github.com/trulander/EnhancedDebugView/raw/master/docs/images/example1.jpg" alt="Usage Example" width="900"/></p>
+<p>When using the plugin, you will see methods:</p>
+<ul>
+    <li><code>methods</code> (if method display is enabled)
+        <ul>
+            <li><code>--__private_method().</code></li>
+            <li><code>--_protected_method().</code></li>
+            <li><code>--public_method().</code></li>
+        </ul>
+    </li>
+    <li><code>dunder_methods</code> (if magic (dunder) methods are enabled)
+        <ul>
+            <li><code>--('__class__', 'Example(value: int)')</code></li>
+            <li>--...</li>
+        </ul>
+    </li>
+    <li><code>private_fields</code> (if private methods are enabled)
+        <ul>
+            <li><code>--__private_field</code></li>
+        </ul>
+    </li>
+    <li><code>protected_fields</code> (if protected methods are enabled)
+        <ul>
+            <li><code>--_protected_field</code></li>
+        </ul>
+    </li>
+    <li>And other inherited methods from <code>object</code></li>
+</ul>
+<p><img src="https://github.com/trulander/EnhancedDebugView/raw/master/docs/images/example2.jpg" alt="Example Output" width="900"/></p>
+<p><img src="https://github.com/trulander/EnhancedDebugView/raw/master/docs/images/example3.jpg" alt="Example Output" width="900"/></p>
+
+<h2>Troubleshooting</h2>
+<h3>Plugin Doesn't Work</h3>
+<ul>
+    <li>Make sure you're using PyCharm (not IntelliJ IDEA).</li>
+    <li>Ensure you've configured the plugin in settings.</li>
+    <li>Restart PyCharm after installation.</li>
+</ul>
+<h3>Methods Don't Display</h3>
+<ul>
+    <li>Make sure you're in Python debugging mode.</li>
+    <li>Check plugin settings.</li>
+    <li>Ensure the object is a Python object (not a primitive; primitives won't display anything, e.g., list).</li>
+</ul>
+
+<h2>Contributing</h2>
+<ol>
+    <li>Fork the project.</li>
+    <li>Create a feature branch (<code>git checkout -b feature/amazing-feature</code>).</li>
+    <li>Commit your changes (<code>git commit -m 'Add amazing feature'</code>).</li>
+    <li>Push to the branch (<code>git push origin feature/amazing-feature</code>).</li>
+    <li>Open a Pull Request.</li>
+</ol>
+
+
+<h2>Known Limitations</h2>
+<ul>
+    <li>Works only with Python objects.</li>
+    <li>Requires an active debugging session.</li>
+    <li>Automatic mode may affect performance with a large number of variables; use targeted manual mode for specific objects if needed.</li>
+    <li>In manual mode, if data doesn't appear after selecting "Add extra data to the object," step to the next line (F9) or avoid expanding the object before adding data.</li>
+    <li>Some built-in types may display a limited set of methods.</li>
+</ul>
+
+<h2>License</h2>
+<p>Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPLv3</a>. You are allowed to fork, modify, and redistribute it, but any derivative work must also be licensed under GPLv3. Include a link to the original repository: <a href="https://github.com/trulander/EnhancedDebugView">https://github.com/trulander/EnhancedDebugView</a>.</p>
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>

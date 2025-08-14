@@ -16,7 +16,8 @@ repositories {
 intellijPlatform {
     pluginVerification {
         ides {
-            ide "PC", "2025.2" // PyCharm Community 2025.2
+            ide "PC", "2025.2"
+            ide "PY", "2025.2"
         }
     }
 }
@@ -73,7 +74,6 @@ tasks {
 }
 
 tasks.named('buildPlugin') {
-    // ⚡ Устанавливаем имя и путь до сборки заранее
     archiveFileName.set("enhanceddebugview-${project.version}.zip")
     destinationDirectory.set(layout.buildDirectory.dir("distributions").get().asFile)
 }
