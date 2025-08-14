@@ -36,7 +36,7 @@ java {
 
 patchPluginXml {
     sinceBuild = '231'
-    untilBuild = '252.*'
+    untilBuild = provider { null }
     changeNotes = """
         <h3>1.0.0</h3>
         <ul>
