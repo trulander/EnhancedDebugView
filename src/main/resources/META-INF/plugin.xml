@@ -6,7 +6,7 @@
     <url>https://github.com/trulander/EnhancedDebugView</url>
     <license>GPL-3.0-or-later</license>
     <licenseUrl>https://www.gnu.org/licenses/gpl-3.0.html</licenseUrl>
-
+    <idea-version since-build="231" until-build="252.*"/>
     <description><![CDATA[
 <p>Enhanced Debug View extends PyCharm's debugger by adding the ability to view available object methods, sorted private and protected fields, and all dunder methods and fields during debugging sessions.</p>
 
