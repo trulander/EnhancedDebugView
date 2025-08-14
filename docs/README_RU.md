@@ -16,6 +16,11 @@
 
 - PyCharm 2023.1 или выше
 
+## Установка
+
+ - Скачать плагин на страницу релизов и установить вручную https://github.com/trulander/EnhancedDebugView/releases
+ - Утановить напрямую в IDE или со страницы маркетплейса https://plugins.jetbrains.com/plugin/28205-enhanced-debug-view
+
 ## Использование
 
 ### Ручной режим (по умолчанию)
