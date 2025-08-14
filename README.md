@@ -15,6 +15,11 @@ This plugin extends PyCharm debugger functionality by adding the ability to view
 
 - PyCharm 2023.1 or higher
 
+## Installation
+
+ - Download file from release here https://github.com/trulander/EnhancedDebugView/releases
+ - install the plugin directly from marketplace https://plugins.jetbrains.com/plugin/28205-enhanced-debug-view
+
 ## Usage
 
 ### Manual Mode (Default)
