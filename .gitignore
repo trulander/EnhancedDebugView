@@ -1,0 +1,27 @@
+# ----------------------
+# Gradle
+# ----------------------
+/build/
+/.gradle/
+/out/
+
+# Ignore wrapper jar caches
+gradle/wrapper/gradle-wrapper.jar.lock
+
+# ----------------------
+# IntelliJ IDEA / PyCharm
+# ----------------------
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ----------------------
+# OS-specific
+# ----------------------
+# macOS
+.DS_Store
+# Linux
+*~
+/.intellijPlatform/*

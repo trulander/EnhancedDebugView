@@ -1,0 +1,59 @@
+<idea-plugin>
+    <id>com.debugger.enhancedview</id>
+    <name>Enhanced Debug View</name>
+    <version>1.0.0</version>
+    <vendor email="trulander@gmail.com" url="https://github.com/trulander">Trulander</vendor>
+    <url>https://github.com/trulander/EnhancedDebugView</url>
+    <license>GPL-3.0-or-later</license>
+    <licenseUrl>https://www.gnu.org/licenses/gpl-3.0.html</licenseUrl>
+
+    <description><![CDATA[
+    Enhanced debugging experience for Python developers. This plugin extends PyCharm's debugger to show available methods, sorted private and protected fields, all dunder methods and fields for objects during debugging sessions.
+    By default, python's debugger doesn't show any methods that have objects, so the plugging resolve the problem, so you will know that methods available for specific object.
+    Also, python's debugger show non-readable names for private methods like __Classname__privatefield, but in the code you named it like __privatefield, the plugin can combine the fields together and show you it as expected without __classname.
+
+    Features:
+    - Context menu action to show methods, sorted private and protected fields, dunder methods and fields for any specific object in debugger
+    - Automatic display of methods for all objects for all debugging sessions(configurable)
+    - Context menu for activation automatic display methods for all objects only for the current debugging session
+    - Toggle between manual and automatic mode
+    - Clean integration with existing debugger UI
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.python</depends>
+
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Settings page -->
+        <applicationConfigurable
+            parentId="tools"
+            instance="com.debugger.enhancedview.settings.EnhancedDebugViewConfigurable"
+            id="EnhancedDebugViewSettings"
+            displayName="Enhanced Debug View"/>
+
+        <!-- Settings storage -->
+        <applicationService
+            serviceImplementation="com.debugger.enhancedview.settings.EnhancedDebugViewSettings"/>
+
+        <!-- Autorun plugin -->
+        <postStartupActivity implementation="com.debugger.enhancedview.startap.DebugAutoInitStartup"/>
+    </extensions>
+
+    <actions>
+        <!-- Context menu action for debugger variables -->
+        <action id="ShowObjectMethods"
+                class="com.debugger.enhancedview.actions.ShowInspectionAction"
+                text="Add extra data to the object"
+                description="Show available methods, sorted private and protected fields, dunder methods for this object">
+            <add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
+        </action>
+        <!-- Action for activation auto-methods for the current debugging session -->
+        <action id="EnableAutoMethods"
+                class="com.debugger.enhancedview.actions.EnableAutoInspectionAction"
+                text="Enable Auto adding extra data for the current session"
+                description="Enable automatic methods, sorted private and protected fields, dunder methods attribute addition on object expansion">
+            <add-to-group group-id="XDebugger.ValueGroup" anchor="after" relative-to-action="XDebugger.SetValue"/>
+        </action>
+    </actions>
+</idea-plugin>

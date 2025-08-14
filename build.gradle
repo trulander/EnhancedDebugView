@@ -1,0 +1,79 @@
+plugins {
+    id 'org.jetbrains.intellij.platform' version '2.7.1'
+    id 'java'
+}
+
+group = 'com.debugger.enhancedview'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
+}
+
+intellijPlatform {
+    pluginVerification {
+        ides {
+            ide "PC", "2025.2" // PyCharm Community 2025.2
+        }
+    }
+}
+
+dependencies {
+    intellijPlatform {
+        pycharmCommunity('2025.2')
+        bundledPlugin('com.intellij.modules.python')
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+patchPluginXml {
+    sinceBuild = '231'
+    untilBuild = '252.*'
+    changeNotes = """
+        <h3>1.0.0</h3>
+        <ul>
+            <li>Initial release</li>
+            <li>Context menu action to show methods, sorted private and protected fields, dunder methods and fields for any specific object in debugger</li>
+            <li>Automatic display of methods for all objects for all debugging sessions(configurable)</li>
+            <li>Context menu for activation automatic display methods for all objects only for the current debugging session</li>
+            <li>Settings page for customization</li>
+        </ul>
+    """
+}
+
+publishPlugin {
+    token = System.getenv('PUBLISH_TOKEN')
+    channels = ['stable']
+}
+
+signPlugin {
+    certificateChain = System.getenv('CERTIFICATE_CHAIN')
+    privateKey = System.getenv('PRIVATE_KEY')
+    password = System.getenv('PRIVATE_KEY_PASSWORD')
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.add('-Xlint:deprecation')
+}
+
+tasks {
+    verifyPlugin{
+        enabled = true
+    }
+    build.dependsOn verifyPlugin
+    publishPlugin.dependsOn signPlugin
+}
+
+tasks.named('buildPlugin') {
+    // ⚡ Устанавливаем имя и путь до сборки заранее
+    archiveFileName.set("enhanceddebugview-${project.version}.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("distributions").get().asFile)
+}
